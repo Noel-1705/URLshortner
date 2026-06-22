@@ -7,6 +7,8 @@ app.config['SQLALCHEMY_DATABASE_URI'] = 'sqlite:///urls.db'
 app.config['SQLALCHEMY_TRACK_MODIFICATIONS'] = False
 db = SQLAlchemy(app)
 
+
+
 class Urls(db.Model):
     id_=db.Column("id_",db.Integer,primary_key=True)
     long = db.Column("long",db.String())
@@ -18,10 +20,9 @@ class Urls(db.Model):
         self.short = short
         self.clicks = 0
 
-@app.before_first_request
-def create_tables():
+with app.app_context():
     db.create_all()
-
+    
 def shorten_url():
     letters= string.ascii_lowercase + string.ascii_uppercase
     while True:
@@ -74,4 +75,5 @@ def stats(short_url):
 
     return "<h1>URL not found</h1>"
 
-if __name__ == '__main__':    app.run(debug=True)
+if __name__ == '__main__':    
+    app.run(debug=True)
